@@ -4,16 +4,20 @@ import { motion } from 'framer-motion';
 import { images } from '../../constants';
 
 import './About.scss';
+import { urlFor, client } from '../../client';
 
-const abouts = [
-  { title: 'Data Structure & Algorithms', description: 'I love to solve Algorithms', imgUrl: images.about01 },
-  { title: 'Web Developer', description: 'I am a Web Developer', imgUrl: images.about02 },
-  { title: 'Block-Chain Developer', description: 'Bringing the power in our hands', imgUrl: images.about03 },
-  { title: 'Machine Learning', description: 'Teaching machines how to boil water', imgUrl: images.about04 },
-
-]
 
 const About = () => {
+
+  const [abouts, setAbouts] = useState([]);
+
+  useEffect(() => {
+    const query = '*[_type == "abouts"]';
+
+    client.fetch(query)
+      .then((data) => setAbouts(data))
+  }, []);
+
   return (
     <>
       <h2 className="head-text"> I know that <span>Problem solving</span><br />equivalents to<br /><span>Practicing Algorithm</span></h2>
@@ -27,7 +31,7 @@ const About = () => {
             className="app__profile-item"
             key={about.title + index}
           >
-            <img src={about.imgUrl} alt={about.title}/>
+            <img src={urlFor(about.imgUrl)} alt={about.title}/>
             <h2 className="bold-text" style={{ marginTop: 20 }}>{about.title}</h2>
             <p className="p-text" style={{ marginTop: 10 }}>{about.description}</p>
           </motion.div>
